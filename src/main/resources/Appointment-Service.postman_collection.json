@@ -1,0 +1,193 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7890-abcd-123456789abc",
+        "name": "Appointment Service",
+        "description": "Colección de Postman para el microservicio de citas médicas",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "12345678"
+    },
+    "item": [
+        {
+            "name": "Crear Cita",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"patientId\": \"patient-001\",\n  \"practitionerId\": \"doctor-001\",\n  \"startAt\": \"2025-09-29T10:00:00-05:00\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/appointments",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments"
+                    ]
+                },
+                "description": "Crear una nueva cita médica"
+            },
+            "response": []
+        },
+        {
+            "name": "Listar Todas las Citas",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/appointments",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments"
+                    ]
+                },
+                "description": "Obtener lista de todas las citas con paginación por defecto"
+            },
+            "response": []
+        },
+        {
+            "name": "Listar Citas con Filtros",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/appointments?patientId=patient-001&page=0&pageSize=10",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments"
+                    ],
+                    "query": [
+                        {
+                            "key": "patientId",
+                            "value": "patient-001",
+                            "description": "ID del paciente"
+                        },
+                        {
+                            "key": "practitionerId",
+                            "value": "doctor-001",
+                            "description": "ID del médico",
+                            "disabled": true
+                        },
+                        {
+                            "key": "state",
+                            "value": "CREATED",
+                            "description": "Estado de la cita (CREATED, CONFIRMED, CANCELLED)",
+                            "disabled": true
+                        },
+                        {
+                            "key": "page",
+                            "value": "0",
+                            "description": "Número de página (por defecto: 0)"
+                        },
+                        {
+                            "key": "pageSize",
+                            "value": "10",
+                            "description": "Tamaño de página (por defecto: 20)"
+                        }
+                    ]
+                },
+                "description": "Obtener lista de citas filtradas por paciente, médico y/o estado"
+            },
+            "response": []
+        },
+        {
+            "name": "Obtener Cita por ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/appointments/{{appointmentId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments",
+                        "{{appointmentId}}"
+                    ]
+                },
+                "description": "Obtener los detalles de una cita específica por su ID"
+            },
+            "response": []
+        },
+        {
+            "name": "Confirmar Cita",
+            "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/appointments/{{appointmentId}}/confirm",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments",
+                        "{{appointmentId}}",
+                        "confirm"
+                    ]
+                },
+                "description": "Confirmar una cita existente cambiando su estado a CONFIRMED"
+            },
+            "response": []
+        },
+        {
+            "name": "Cancelar Cita",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/appointments/{{appointmentId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "appointments",
+                        "{{appointmentId}}"
+                    ]
+                },
+                "description": "Cancelar una cita existente cambiando su estado a CANCELLED"
+            },
+            "response": []
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://127.0.0.1:8080",
+            "type": "string"
+        },
+        {
+            "key": "appointmentId",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}
