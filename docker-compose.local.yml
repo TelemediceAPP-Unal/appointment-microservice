@@ -1,0 +1,67 @@
+# Docker Compose para Desarrollo Local
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: appointment-postgres
+    environment:
+      POSTGRES_DB: appointments_local
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_local_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d appointments_local"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - appointment-network
+
+  # Aplicación (opcional, si quieres ejecutar todo en Docker)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appointment-service
+    image: appointment-service:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Spring Profile
+      SPRING_PROFILES_ACTIVE: prod
+      
+      # Database configuration
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: appointments_local
+      DB_USER: app_user
+      DB_PASSWORD: local_password
+      
+      # GCP Configuration (deshabilitado para local)
+      GCP_PROJECT_ID: local-project
+      SECRET_MANAGER_ENABLED: "false"
+      PUBSUB_ENABLED: "false"
+      
+      # Spring Boot configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/appointments_local
+      SPRING_DATASOURCE_USERNAME: app_user
+      SPRING_DATASOURCE_PASSWORD: local_password
+    ports:
+      - "8080:8080"
+    networks:
+      - appointment-network
+    restart: unless-stopped
+
+networks:
+  appointment-network:
+    driver: bridge
+
+volumes:
+  postgres_local_data:
