@@ -26,3 +26,22 @@ logging:
   level:
     root: INFO
     org.hibernate.SQL: INFO
+
+# Google Cloud Platform Configuration
+gcp:
+  project-id: ${GCP_PROJECT_ID:your-project-id}
+  pubsub:
+    enabled: ${PUBSUB_ENABLED:false}
+    topic-name: ${PUBSUB_TOPIC_NAME:appointment-events}
+    credentials-path: ${GOOGLE_APPLICATION_CREDENTIALS:}
+  secret-manager:
+    enabled: ${SECRET_MANAGER_ENABLED:false}
+    # Secret names configuration
+    secrets:
+      db-host: ${SECRET_DB_HOST:db-host}
+      db-port: ${SECRET_DB_PORT:db-port}
+      db-name: ${SECRET_DB_NAME:db-name}
+      db-username: ${SECRET_DB_USERNAME:db-username}
+      db-password: ${SECRET_DB_PASSWORD:db-password}
+      pubsub-topic-name: ${SECRET_PUBSUB_TOPIC:pubsub-topic-name}
+      pubsub-service-account: ${SECRET_PUBSUB_SA:pubsub-service-account-key}

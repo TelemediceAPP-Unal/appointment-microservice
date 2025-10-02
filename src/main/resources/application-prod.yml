@@ -9,3 +9,22 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Google Cloud Platform Configuration for Production
+gcp:
+  project-id: ${GCP_PROJECT_ID}
+  pubsub:
+    enabled: ${PUBSUB_ENABLED:true}
+    topic-name: ${PUBSUB_TOPIC_NAME:appointment-events}
+    credentials-path: ${GOOGLE_APPLICATION_CREDENTIALS}
+  secret-manager:
+    enabled: ${SECRET_MANAGER_ENABLED:true}
+    # Secret names in production
+    secrets:
+      db-host: ${SECRET_DB_HOST:appointment-db-host}
+      db-port: ${SECRET_DB_PORT:appointment-db-port}
+      db-name: ${SECRET_DB_NAME:appointment-db-name}
+      db-username: ${SECRET_DB_USERNAME:appointment-db-username}
+      db-password: ${SECRET_DB_PASSWORD:appointment-db-password}
+      pubsub-topic-name: ${SECRET_PUBSUB_TOPIC:appointment-pubsub-topic}
+      pubsub-service-account: ${SECRET_PUBSUB_SA:appointment-pubsub-sa}
